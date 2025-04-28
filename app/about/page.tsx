@@ -1,7 +1,7 @@
 'use client';
+import { Suspense, useState, useEffect } from 'react';
 import UserInfo from "@/app/components/UserInfo";
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const ProfileWrapper = styled.div`
@@ -11,7 +11,7 @@ const ProfileWrapper = styled.div`
     padding: 2rem;
 `;
 
-export default function AboutPage() {
+function AboutPageContent() {
     const searchParams = useSearchParams();
     const [userInfo, setUserInfo] = useState<{
         name: string | null;
@@ -46,5 +46,13 @@ export default function AboutPage() {
             picture={userInfo.picture}
             username={username}
         />
+    );
+}
+
+export default function AboutPage() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <AboutPageContent />
+        </Suspense>
     );
 }
