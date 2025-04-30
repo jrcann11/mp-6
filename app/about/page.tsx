@@ -11,24 +11,30 @@ const ProfileWrapper = styled.div`
     padding: 2rem;
 `;
 
+// Core component that renders user profile info based on URL search params
 function AboutPageContent() {
     const searchParams = useSearchParams();
+
+    // State to hold user info retrieved from URL parameters
     const [userInfo, setUserInfo] = useState<{
         name: string | null;
         email: string | null;
         picture: string | null;
     }>({ name: null, email: null, picture: null });
 
+    // Effect to extract and store user info when URL params change
     useEffect(() => {
         const name = searchParams.get('name');
         const email = searchParams.get('email');
         const picture = searchParams.get('picture');
 
+        // Update state only if all required params are available
         if (name && email && picture) {
             setUserInfo({ name, email, picture });
         }
     }, [searchParams]);
 
+    // If user info is missing, display a message
     if (!userInfo.name || !userInfo.email || !userInfo.picture) {
         return (
             <ProfileWrapper>
@@ -37,6 +43,7 @@ function AboutPageContent() {
         );
     }
 
+    // Derive a username from the email prefix
     const username = userInfo.email.split('@')[0];
 
     return (
@@ -49,6 +56,7 @@ function AboutPageContent() {
     );
 }
 
+// Wrap the page content in a Suspense boundary to handle async rendering
 export default function AboutPage() {
     return (
         <Suspense fallback={<p>Loading...</p>}>
